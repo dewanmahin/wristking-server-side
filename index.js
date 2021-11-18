@@ -17,13 +17,27 @@ async function run () {
         await client.connect();
         const database = client.db('wristKing');
         const productsCollection = database.collection("products");
-        // const bookingsCollection = database.collection("bookings");
+        const ordersCollection = database.collection("orders");
 
         // // GET PRODUCTS API
         app.get('/products', async (req, res) => {
             const cursor = productsCollection.find({});
             const products = await cursor.toArray();
             res.send(products);
+        })
+
+        // // POST ORDER API
+        app.post('/orders', async (req, res) => {
+            orders = req.body;
+            const result = await ordersCollection.insertOne(orders);
+            res.json(result)
+        })
+
+        // // GET All Order API 
+        app.get('/allOrders', async (req, res) => {
+            const cursor = ordersCollection.find({});
+            const allOrders = await cursor.toArray();
+            res.send(allOrders);
         })
 
     }finally{
